@@ -1,5 +1,6 @@
 import { useStore, actions } from './store'
 import { useRef, useState } from 'react'
+import Item from './components/item'
 
 function App() {
     const [state, dispatch] = useStore()
@@ -15,7 +16,7 @@ function App() {
         dispatch(actions.editTodoInput(todoInput));
         inputElement.current.focus();
     }
-    const handleDelete = () => {
+    const handleDelete = (index) => {
         dispatch(actions.deleteTodoInput(index))
     }
     const handleDeleteAll = () => {
@@ -45,14 +46,22 @@ function App() {
             <button onClick={handleButton}>{isEdit ? "Update" : "Add"}</button>
             <button onClick={handleDeleteAll}
             >DeleteAll</button>
-            {todos.map((todo, index) => (
-                <li key={index}>
-                    <span>{todo}</span>
-                    <button onClick={handleDelete}>&times;</button>
-                </li>
-            ))}
+            
+            <Item  />
         </div>
     )
 }
 
 export default App
+// óc chó 
+// // {todos.map((todo, index) => (
+//     <li key={index}>    
+//     <button onClick={() => handleDelete(index)}>hehe</button>
+//     <span>{todo}</span>
+//     <button onClick={() => handleDelete(index)}>&times;</button>
+// </li>
+// ))}
+
+// cai doan nay tao 1 file component khac ra
+// con set cac state rieng cho no 
+// ừ trông rài thiêtj
