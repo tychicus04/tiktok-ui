@@ -1,6 +1,7 @@
 import { useStore, actions } from './store'
 import { useRef, useState } from 'react'
 
+
 function App() {
     const [state, dispatch] = useStore()
     const { todos, todoInput } = state
@@ -64,3 +65,15 @@ function App() {
 }
 
 export default App
+// óc chó 
+// // {todos.map((todo, index) => (
+//     <li key={index}>    
+//     <button onClick={() => handleDelete(index)}>hehe</button>
+//     <span>{todo}</span>
+//     <button onClick={() => handleDelete(index)}>&times;</button>
+// </li>
+// ))}
+
+// cai doan nay tao 1 file component khac ra
+// con set cac state rieng cho no 
+// ừ trông rài thiêtj
