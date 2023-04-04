@@ -6,6 +6,7 @@ function App() {
     const { todos, todoInput } = state
     const inputElement = useRef()
     const [isEdit, setIsEdit] = useState(false)
+    const [currIndex, setCurrIndex] = useState()
 
     const handleAdd = () => {
         dispatch(actions.addTodoInput(todoInput));
@@ -14,9 +15,6 @@ function App() {
     const handleEdit = () => {
         dispatch(actions.editTodoInput(todoInput));
         inputElement.current.focus();
-    }
-    const handleDelete = () => {
-        dispatch(actions.deleteTodoInput(index))
     }
     const handleDeleteAll = () => {
         dispatch(actions.deleteALlTodoInput())
@@ -27,6 +25,13 @@ function App() {
         if (isEdit) {
             handleEdit()
         } else handleAdd() 
+    }
+
+    const triggerEdit = (index) => {
+        setIsEdit((prev) => true );
+        setCurrIndex((prev) => index)
+        inputElement.current.focus()
+        dispatch(actions.setTodoInput(todos[index]))
     }
 
     return (
@@ -48,7 +53,10 @@ function App() {
             {todos.map((todo, index) => (
                 <li key={index}>
                     <span>{todo}</span>
-                    <button onClick={handleDelete}>&times;</button>
+                    <button onClick={() => {
+                        dispatch(actions.deleteTodoInput(index))
+                    }}>&times;</button>
+                    <button onClick={() => triggerEdit(index)}>Edit</button>
                 </li>
             ))}
         </div>
