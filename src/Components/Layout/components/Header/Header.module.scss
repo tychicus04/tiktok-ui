@@ -26,6 +26,9 @@
 }
 
 .search {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 361px;
     height: var(--search-height);
     padding-left: 16px;
@@ -115,10 +118,27 @@
 }
 
 .action-btn {
+    position: relative;
+    display: flex;
     font-size: 2.2rem;
     color: #161823;
     background-color: transparent;
-    padding: 4px 12px;
+    padding: 4px 10px;
+}
+
+.badge {
+    position: absolute;
+    top: -3px;
+    right: 0px;
+    padding: 0 6px;
+    height: 2rem;
+    line-height: 2rem;
+    border-radius: 10px;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--white);
+    font-family: 'ProximaNova', sans-serif;
+    background-color: var(--primary);
 }
 
 .user-avt {
