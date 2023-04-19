@@ -3,6 +3,7 @@ import HeadlessTippy from '@tippyjs/react/headless';
 import AccountItem from '~/Components/AccountItem';
 import { Wrapper as PopperWrapper } from '~/Components/Popper';
 import { SearchIcon } from '~/Components/Icon';
+import { useDebounce } from '~/hooks';
 import styles from './Search.module.scss';
 import { useState, useEffect, useRef } from 'react';
 import classNames from 'classnames/bind';
@@ -14,20 +15,30 @@ function Search() {
     const [searchValue, setSearchValue] = useState('');
     const [searchHistory, setSearchHistory] = useState([]);
     const [showHistory, setShowHistory] = useState(true);
+    const [loading, setLoading] = useState(false);
+
+    const debounced = useDebounce(searchValue, 500);
 
     const inputRef = useRef();
 
     useEffect(() => {
-        if (!searchValue.trim()) {
+        if (!debounced.trim()) {
+            setSearchHistory([]);
             return;
         }
 
-        fetch(`https://tiktok.fullstack.edu.vn/api/users/search?q=${encodeURIComponent(searchValue)}&type=less`)
+        setLoading(true);
+
+        fetch(`https://tiktok.fullstack.edu.vn/api/users/search?q=${encodeURIComponent(debounced)}&type=less`)
             .then((res) => res.json())
             .then((res) => {
                 setSearchHistory(res.data);
+                setLoading(false);
+            })
+            .catch(() => {
+                setLoading(false);
             });
-    }, [searchValue]);
+    }, [debounced]);
 
     const handleClear = () => {
         setSearchValue('');
@@ -67,12 +78,12 @@ function Search() {
                     onFocus={() => setShowHistory(true)}
                 />
 
-                {!!searchValue && (
+                {!!searchValue && !loading && (
                     <button className={cx('clear-btn')} onClick={handleClear}>
                         <FontAwesomeIcon icon={faCircleXmark} />
                     </button>
                 )}
-                {/* <FontAwesomeIcon className={cx('loading')} icon={faSpinner} /> */}
+                {loading && <FontAwesomeIcon className={cx('loading')} icon={faSpinner} />}
                 <button className={cx('search-btn')}>
                     <SearchIcon />
                 </button>
