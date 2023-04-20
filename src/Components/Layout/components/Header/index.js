@@ -18,7 +18,7 @@ import styles from './Header.module.scss';
 import images from '~/assets/images';
 import Menu from '~/Components/Popper/Menu';
 import Image from '~/Components/Image';
-import { MessageIcon, UploadIcon, InboxIcon, SearchIcon } from '~/Components/Icon';
+import { MessageIcon, UploadIcon, InboxIcon } from '~/Components/Icon';
 import Search from '../Search';
 
 const cx = classNames.bind(styles);
