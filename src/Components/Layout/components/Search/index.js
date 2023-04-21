@@ -52,45 +52,57 @@ function Search() {
         setShowHistory(false);
     };
 
-    return (
-        <HeadlessTippy
-            interactive
-            visible={showHistory && searchHistory.length > 0}
-            render={(attrs) => (
-                <div className={cx('search-history')} tabIndex="-1" {...attrs}>
-                    <PopperWrapper>
-                        <h4 className={cx('search-title')}>Accounts</h4>
-                        {searchHistory.map((result) => (
-                            <AccountItem key={result.id} data={result} />
-                        ))}
-                    </PopperWrapper>
-                </div>
-            )}
-            onClickOutside={handleHideHistory}
-        >
-            <div className={cx('search')}>
-                <input
-                    ref={inputRef}
-                    value={searchValue}
-                    placeholder="Search accounts and videos"
-                    spellCheck={false}
-                    onChange={(e) => {
-                        setSearchValue(e.target.value);
-                    }}
-                    onFocus={() => setShowHistory(true)}
-                />
+    const handleChange = (e) => {
+        const searchValue = e.target.value;
+        if (!searchValue.startsWith(' ')) {
+            setSearchValue(searchValue);
+        }
+    };
 
-                {!!searchValue && !loading && (
-                    <button className={cx('clear-btn')} onClick={handleClear}>
-                        <FontAwesomeIcon icon={faCircleXmark} />
-                    </button>
+    return (
+        <div>
+            <HeadlessTippy
+                interactive
+                visible={showHistory && searchHistory.length > 0}
+                render={(attrs) => (
+                    <div className={cx('search-history')} tabIndex="-1" {...attrs}>
+                        <PopperWrapper>
+                            <h4 className={cx('search-title')}>Accounts</h4>
+                            {searchHistory.map((result) => (
+                                <AccountItem key={result.id} data={result} />
+                            ))}
+                        </PopperWrapper>
+                    </div>
                 )}
-                {loading && <FontAwesomeIcon className={cx('loading')} icon={faSpinner} />}
-                <button className={cx('search-btn')}>
-                    <SearchIcon />
-                </button>
-            </div>
-        </HeadlessTippy>
+                onClickOutside={handleHideHistory}
+            >
+                <div className={cx('search')}>
+                    <input
+                        ref={inputRef}
+                        value={searchValue}
+                        placeholder="Search accounts and videos"
+                        spellCheck={false}
+                        onChange={handleChange}
+                        onFocus={() => setShowHistory(true)}
+                    />
+
+                    {!!searchValue && !loading && (
+                        <button className={cx('clear-btn')} onClick={handleClear}>
+                            <FontAwesomeIcon icon={faCircleXmark} />
+                        </button>
+                    )}
+                    {loading && <FontAwesomeIcon className={cx('loading')} icon={faSpinner} />}
+                    <button
+                        className={cx('search-btn')}
+                        onMouseDown={(e) => {
+                            e.preventDefault();
+                        }}
+                    >
+                        <SearchIcon />
+                    </button>
+                </div>
+            </HeadlessTippy>
+        </div>
     );
 }
 
