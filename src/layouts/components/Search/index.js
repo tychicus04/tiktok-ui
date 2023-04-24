@@ -15,41 +15,40 @@ const cx = classNames.bind(styles);
 
 function Search() {
     const [searchValue, setSearchValue] = useState('');
-    const [searchHistory, setSearchHistory] = useState([]);
-    const [showHistory, setShowHistory] = useState(true);
+    const [searchResult, setSearchResult] = useState([]);
+    const [showResult, setShowResult] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const debounced = useDebounce(searchValue, 500);
+    const debouncedValue = useDebounce(searchValue, 500);
 
     const inputRef = useRef();
 
     useEffect(() => {
-        if (!debounced.trim()) {
-            setSearchHistory([]);
+        if (!debouncedValue.trim()) {
+            setSearchResult([]);
             return;
         }
 
-        setLoading(true);
-
         const fetchApi = async () => {
-            setLoading(false);
+            setLoading(true);
 
-            const result = await searchService.search(debounced);
+            const result = await searchService.search(debouncedValue);
 
-            setSearchHistory(result);
+            setSearchResult(result);
             setLoading(false);
         };
+
         fetchApi();
-    }, [debounced]);
+    }, [debouncedValue]);
 
     const handleClear = () => {
         setSearchValue('');
-        setSearchHistory([]);
+        setSearchResult([]);
         inputRef.current.focus();
     };
 
-    const handleHideHistory = () => {
-        setShowHistory(false);
+    const handleHideResult = () => {
+        setShowResult(false);
     };
 
     const handleChange = (e) => {
@@ -60,21 +59,23 @@ function Search() {
     };
 
     return (
+        // Using a wrapper <div> tag around the reference element solves
+        // this by creating a new parentNode context.
         <div>
             <HeadlessTippy
                 interactive
-                visible={showHistory && searchHistory.length > 0}
+                visible={showResult && searchResult.length > 0}
                 render={(attrs) => (
-                    <div className={cx('search-history')} tabIndex="-1" {...attrs}>
+                    <div className={cx('search-result')} tabIndex="-1" {...attrs}>
                         <PopperWrapper>
                             <h4 className={cx('search-title')}>Accounts</h4>
-                            {searchHistory.map((result) => (
+                            {searchResult.map((result) => (
                                 <AccountItem key={result.id} data={result} />
                             ))}
                         </PopperWrapper>
                     </div>
                 )}
-                onClickOutside={handleHideHistory}
+                onClickOutside={handleHideResult}
             >
                 <div className={cx('search')}>
                     <input
@@ -83,21 +84,16 @@ function Search() {
                         placeholder="Search accounts and videos"
                         spellCheck={false}
                         onChange={handleChange}
-                        onFocus={() => setShowHistory(true)}
+                        onFocus={() => setShowResult(true)}
                     />
-
                     {!!searchValue && !loading && (
                         <button className={cx('clear-btn')} onClick={handleClear}>
                             <FontAwesomeIcon icon={faCircleXmark} />
                         </button>
                     )}
                     {loading && <FontAwesomeIcon className={cx('loading')} icon={faSpinner} />}
-                    <button
-                        className={cx('search-btn')}
-                        onMouseDown={(e) => {
-                            e.preventDefault();
-                        }}
-                    >
+
+                    <button className={cx('search-btn')} onMouseDown={(e) => e.preventDefault()}>
                         <SearchIcon />
                     </button>
                 </div>

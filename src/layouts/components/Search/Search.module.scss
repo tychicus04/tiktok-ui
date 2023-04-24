@@ -1,5 +1,5 @@
 .search,
-.search-history {
+.search-result {
     width: 361px;
 }
 
@@ -19,6 +19,7 @@
     input {
         flex: 1;
         height: 100%;
+        padding-right: 40px;
         color: var(--black);
         font-size: 1.6rem;
         border: none;
