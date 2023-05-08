@@ -1,26 +1,26 @@
-import styles from './SuggestedAccount.module.scss';
 import classNames from 'classnames/bind';
 import PropTypes from 'prop-types';
+
 import AccountItem from './Accountitem';
+import styles from './SidebarAccount.module.scss';
 
 const cx = classNames.bind(styles);
 
-function SuggestedAccount({ label }) {
+function SidebarAccount({ label, data = [] }) {
     return (
         <div className={cx('wrapper')}>
             <p className={cx('label')}>{label}</p>
-            <AccountItem />
-            <AccountItem />
-            <AccountItem />
-            <AccountItem />
-
+            {data.map((account) => (
+                <AccountItem key={account.id} data={account} />
+            ))}
             <p className={cx('more-btn')}>See all</p>
         </div>
     );
 }
 
-SuggestedAccount.propTypes = {
+SidebarAccount.propTypes = {
     label: PropTypes.string.isRequired,
+    data: PropTypes.array,
 };
 
-export default SuggestedAccount;
+export default SidebarAccount;
